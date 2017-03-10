@@ -22,11 +22,10 @@
                 session.setAttribute("beneficiaries", gcr.getResponse_data());
             }
             session.setAttribute("success", pgr.getResponse_description());
-            response.sendRedirect("benepisyaryo");
         } else {
             session.setAttribute("error", pgr.getResponse_description());
-            response.sendRedirect("benepisyaryo");
         }
+        response.sendRedirect("benepisyaryo");
     } else {
         response.sendRedirect("indizea");
     }

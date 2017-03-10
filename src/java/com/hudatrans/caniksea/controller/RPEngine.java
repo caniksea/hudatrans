@@ -205,4 +205,12 @@ public class RPEngine {
         String response = RPServiceEntry.getPort().deleteBeneficiary(beneficiaryId);
         return GSON.fromJson(response, PostGenericResponse.class);
     }
+    
+    public PostGenericResponse updateUser(User user){
+        String request = GSON.toJson(user);
+        LOG.info("Calling updateUser with request: "+request);
+        String response = RPServiceEntry.getPort().updateUser(request);
+        LOG.info("Response from service: " + response);
+        return GSON.fromJson(response, PostGenericResponse.class);
+    }
 }

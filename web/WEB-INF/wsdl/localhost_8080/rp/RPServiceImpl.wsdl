@@ -74,6 +74,10 @@
 
   <xs:element name="saveTransactionResponse" type="tns:saveTransactionResponse"/>
 
+  <xs:element name="updateUser" type="tns:updateUser"/>
+
+  <xs:element name="updateUserResponse" type="tns:updateUserResponse"/>
+
   <xs:complexType name="getCountry">
     <xs:sequence>
       <xs:element minOccurs="0" name="request" type="xs:string"/>
@@ -129,6 +133,18 @@
   </xs:complexType>
 
   <xs:complexType name="getBeneficiaryResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="request" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateUserResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="return" type="xs:string"/>
     </xs:sequence>
@@ -302,6 +318,10 @@
     <wsdl:part element="tns:getBeneficiariesResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="updateUser">
+    <wsdl:part element="tns:updateUser" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="registerResponse">
     <wsdl:part element="tns:registerResponse" name="parameters">
     </wsdl:part>
@@ -402,6 +422,10 @@
     <wsdl:part element="tns:getPendingTransactions" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="updateUserResponse">
+    <wsdl:part element="tns:updateUserResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="getFailedTransactionsResponse">
     <wsdl:part element="tns:getFailedTransactionsResponse" name="parameters">
     </wsdl:part>
@@ -459,6 +483,12 @@
       <wsdl:input message="tns:getBeneficiary" name="getBeneficiary">
     </wsdl:input>
       <wsdl:output message="tns:getBeneficiaryResponse" name="getBeneficiaryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateUser">
+      <wsdl:input message="tns:updateUser" name="updateUser">
+    </wsdl:input>
+      <wsdl:output message="tns:updateUserResponse" name="updateUserResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="deleteBeneficiary">
@@ -584,6 +614,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getBeneficiaryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateUser">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="updateUser">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateUserResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
