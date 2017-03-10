@@ -64,6 +64,7 @@
         if (message != null && !message.isEmpty()) {
             showMsg = true;
             css_style += " msg-error";
+            session.removeAttribute("error");
         }
     }
 %>

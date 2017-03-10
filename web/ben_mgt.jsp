@@ -64,7 +64,7 @@
         <div class="row" style="margin-bottom:5px;">
             <div class="col-md-12">
                 <div class="sm-st clearfix">
-                    <span class="sm-st-icon st-blue"><i class="fa fa-th-list"></i></span>
+                    <span class="sm-st-icon st-blue"><i class="fa fa-group"></i></span>
                     <div class="sm-st-info">
                         <span><%= noOfBeneficiaries%></span>
                         Total Beneficiaries
@@ -76,7 +76,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <section class="panel">
-                    <header class="panel-heading tab-bg-dark-navy-blue tab-right ">
+<!--                    <header class="panel-heading tab-bg-dark-navy-blue tab-right ">
                         <ul class="nav nav-tabs pull-right">
                             <li class="active">
                                 <a data-toggle="tab" href="#home-3">
@@ -85,7 +85,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </header>
+                    </header>-->
                     <div class="panel-body">
                         <%if (showInfo) {%>
                         <div class="alert alert=block <%= infoStyle%>">
@@ -120,13 +120,6 @@
                                                                     <input type="hidden" name="beneficiary_source" value="ext_rp" />
                                                                     <div class="panel-body">
                                                                         <div class="row">
-                                                                            <div class="col-md-6 form-group">
-                                                                                <input type="text" placeholder="First Name" name="beneficiary_firstname" class="form-control" required>
-                                                                            </div>
-
-                                                                            <div class="col-md-6 form-group">
-                                                                                <input type="text" placeholder="Last Name" name="beneficiary_lastname" class="form-control">
-                                                                            </div>
 
                                                                             <div class="col-md-12 form-group">
                                                                                 <select id="bg_country" name="beneficiary_country" class="form-control" required>
@@ -137,14 +130,34 @@
                                                                                 </select>
                                                                             </div>
 
-                                                                            <div class="col-md-6 form-group">
+                                                                            <div class="col-md-5 form-group">
                                                                                 <select id="bg_bank" name="beneficiary_bank" class="form-control" required>
                                                                                     <option>Select Bank</option>
                                                                                 </select>
                                                                             </div>
 
+                                                                            <div class="col-md-5 form-group">
+                                                                                <input type="text" name="beneficiary_acc_number" placeholder="Account Number" required class="form-control">
+                                                                            </div>
+
+                                                                            <div class="col-md-2 form-group">
+                                                                                <button type="button" class=" form-control btn btn-success float-right">Verify</button>
+                                                                            </div>
+                                                                            
                                                                             <div class="col-md-6 form-group">
-                                                                                <input type="number" name="beneficiary_acc_number" placeholder="Account Number" required class="form-control">
+                                                                                <input type="text" placeholder="First Name" name="beneficiary_firstname" class="form-control" required>
+                                                                            </div>
+
+                                                                            <div class="col-md-6 form-group">
+                                                                                <input type="text" placeholder="Last Name" name="beneficiary_lastname" class="form-control">
+                                                                            </div>
+                                                                            
+                                                                            <div class="col-md-6 form-group">
+                                                                                <input type="text" placeholder="Phone Number" name="beneficiary_phone" class="form-control" required>
+                                                                            </div>
+
+                                                                            <div class="col-md-6 form-group">
+                                                                                <input type="email" placeholder="Email Address" name="beneficiary_email" class="form-control">
                                                                             </div>
 
                                                                             <div class="col-md-6 col-xs-6 form-group">
@@ -165,14 +178,14 @@
                                         </div>
                                     </header>
                                     <div class="panel-body table-responsive">
-                                        <div class="box-tools m-b-15">
+<!--                                        <div class="box-tools m-b-15">
                                             <div class="input-group">
                                                 <input type="text" name="table_search" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
                                                 <div class="input-group-btn">
                                                     <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <table class="table table-hover">
                                             <tr>
                                                 <th>First Name</th>

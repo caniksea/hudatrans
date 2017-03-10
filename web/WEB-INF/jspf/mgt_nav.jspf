@@ -18,8 +18,8 @@
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <li class="${pageContext.request.requestURI eq '/hudatrans/arbdel' ? 'active' : ''}">
-                <a href="general.html">
+            <li class="${pageContext.request.requestURI eq '/hudatrans/profile' ? 'active' : ''}">
+                <a href="profile">
                     <i class="fa fa-gavel"></i> <span>Profile</span>
                 </a>
             </li>

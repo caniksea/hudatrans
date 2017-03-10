@@ -28,6 +28,7 @@ public class ObjectFactory {
     private final static QName _LoginResponse_QNAME = new QName("http://ws.caniksea.rp.com", "loginResponse");
     private final static QName _GetAllTransactionsResponse_QNAME = new QName("http://ws.caniksea.rp.com", "getAllTransactionsResponse");
     private final static QName _GetBeneficiariesResponse_QNAME = new QName("http://ws.caniksea.rp.com", "getBeneficiariesResponse");
+    private final static QName _UpdateUser_QNAME = new QName("http://ws.caniksea.rp.com", "updateUser");
     private final static QName _RegisterResponse_QNAME = new QName("http://ws.caniksea.rp.com", "registerResponse");
     private final static QName _GetPaymethods_QNAME = new QName("http://ws.caniksea.rp.com", "getPaymethods");
     private final static QName _GetBeneficiaries_QNAME = new QName("http://ws.caniksea.rp.com", "getBeneficiaries");
@@ -54,6 +55,7 @@ public class ObjectFactory {
     private final static QName _DeleteBeneficiaryResponse_QNAME = new QName("http://ws.caniksea.rp.com", "deleteBeneficiaryResponse");
     private final static QName _GetPendingTransactions_QNAME = new QName("http://ws.caniksea.rp.com", "getPendingTransactions");
     private final static QName _GetFailedTransactionsResponse_QNAME = new QName("http://ws.caniksea.rp.com", "getFailedTransactionsResponse");
+    private final static QName _UpdateUserResponse_QNAME = new QName("http://ws.caniksea.rp.com", "updateUserResponse");
     private final static QName _GetCountryResponse_QNAME = new QName("http://ws.caniksea.rp.com", "getCountryResponse");
     private final static QName _GetSuccessfulTransactionsResponse_QNAME = new QName("http://ws.caniksea.rp.com", "getSuccessfulTransactionsResponse");
     private final static QName _GetFailedTransactions_QNAME = new QName("http://ws.caniksea.rp.com", "getFailedTransactions");
@@ -197,6 +199,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UpdateUserResponse }
+     * 
+     */
+    public UpdateUserResponse createUpdateUserResponse() {
+        return new UpdateUserResponse();
+    }
+
+    /**
      * Create an instance of {@link GetCountryResponse }
      * 
      */
@@ -234,6 +244,14 @@ public class ObjectFactory {
      */
     public LoginResponse createLoginResponse() {
         return new LoginResponse();
+    }
+
+    /**
+     * Create an instance of {@link UpdateUser }
+     * 
+     */
+    public UpdateUser createUpdateUser() {
+        return new UpdateUser();
     }
 
     /**
@@ -390,6 +408,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.caniksea.rp.com", name = "getBeneficiariesResponse")
     public JAXBElement<GetBeneficiariesResponse> createGetBeneficiariesResponse(GetBeneficiariesResponse value) {
         return new JAXBElement<GetBeneficiariesResponse>(_GetBeneficiariesResponse_QNAME, GetBeneficiariesResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateUser }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.caniksea.rp.com", name = "updateUser")
+    public JAXBElement<UpdateUser> createUpdateUser(UpdateUser value) {
+        return new JAXBElement<UpdateUser>(_UpdateUser_QNAME, UpdateUser.class, null, value);
     }
 
     /**
@@ -624,6 +651,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.caniksea.rp.com", name = "getFailedTransactionsResponse")
     public JAXBElement<GetFailedTransactionsResponse> createGetFailedTransactionsResponse(GetFailedTransactionsResponse value) {
         return new JAXBElement<GetFailedTransactionsResponse>(_GetFailedTransactionsResponse_QNAME, GetFailedTransactionsResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateUserResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.caniksea.rp.com", name = "updateUserResponse")
+    public JAXBElement<UpdateUserResponse> createUpdateUserResponse(UpdateUserResponse value) {
+        return new JAXBElement<UpdateUserResponse>(_UpdateUserResponse_QNAME, UpdateUserResponse.class, null, value);
     }
 
     /**

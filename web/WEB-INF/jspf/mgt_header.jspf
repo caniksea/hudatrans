@@ -16,12 +16,10 @@
         <link href="wp-content/assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
         <!-- jvectormap -->
         <link href="wp-content/assets/css/jvectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
-        <!-- Date Picker -->
-        <link href="wp-content/assets/css/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
-        <!-- fullCalendar -->
-        <!-- <link href="css/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" /> -->
-        <!-- Daterange picker -->
-        <link href="wp-content/assets/css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+        <!-- Bootstrap css -->
+        <link href="wp-content/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <!-- Date time Picker -->
+        <link href="wp-content/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
         <!-- iCheck for checkboxes and radio inputs -->
         <link href="wp-content/assets/css/iCheck/all.css" rel="stylesheet" type="text/css" />
         <!-- bootstrap wysihtml5 - text editor -->
@@ -29,6 +27,8 @@
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <!-- Theme style -->
         <link href="wp-content/assets/css/style.css" rel="stylesheet" type="text/css" />
+        <!-- custom style -->
+        <link href="wp-content/assets/css/aa_style.css" rel="stylesheet" type="text/css" />
     </head>
     <body class="skin-black">
         <!-- header logo: style can be found in header.less -->

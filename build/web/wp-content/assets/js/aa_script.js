@@ -7,13 +7,20 @@
 var service_root = "rps?";
 var site_root = "http://localhost:8080/hudatrans";
 var country_obj = {};
+var country_json = [];
 
 $(function () {
     //hide loading image
     $("#busyDiv, #msg-general, #msg-widget, #exchange-container, #transaction-info-div").hide();
     $("#beneficiary_info, #bg_tnxInfo_dest, #bg_tnxInfo_exchange, #bg_tnxInfo_fee").hide();
-    $("#bg_tnxInfo_total").hide();
-    //init();
+    $("#bg_tnxInfo_total, #update_basic, #cancel_basic, #update_address, #cancel_address").hide();
+
+    init();
+
+    $("#datetimepicker, #datetimepicker_from, #datetimepicker_to").datetimepicker({
+        maxDate: new Date(),
+        format: 'DD/MM/YYYY'
+    });
 
     $("#togglePass").click(function () {
         $("#r_password").togglePassword();
@@ -156,7 +163,7 @@ $(function () {
             $.getJSON(url, function (data) {
                 if (data.response_code === "00") {
                     $("#bg_countryCode").val(data.data.country_code);
-                    
+
                     country_obj = getCountry(data.data.country_code);
                     var bank = getBank(data.data.country_code, data.data.bank_id);
 
@@ -182,7 +189,57 @@ $(function () {
             $("#bg_fee, #bg_total, bg_countryFlag, bg_destinationCurr, bg_destinationCountry, #bg_exchange").html("");
         }
     });
+
+    $("#edit_basic").click(function () {
+        $(this).hide();
+        $("#mgt_firstname, #mgt_lastname, #mgt_dob").attr("disabled", false);
+        $("#update_basic, #cancel_basic").show();
+    });
+
+    $("#cancel_basic").click(function () {
+        $(this).hide();
+        $("#basic_form")[0].reset();
+        $("#cancel_basic, #update_basic").hide();
+        $("#mgt_firstname, #mgt_lastname, #mgt_dob").attr("disabled", true);
+        $("#edit_basic").show();
+    });
+
+    $("#edit_address").click(function () {
+        $(this).hide();
+        $("#mgt_addy, #mgt_country, #mgt_city, #mgt_postcode, #mgt_landline, #mgt_mobile, #mgt_fax").attr("disabled", false);
+        $("#update_address, #cancel_address").show();
+    });
+    
+    $("#cancel_address").click(function(){
+        $(this).hide();
+        $("#contact_form")[0].reset();
+        $("#update_address, #cancel_address").hide();
+        $("#mgt_addy, #mgt_country, #mgt_city, #mgt_postcode, #mgt_landline, #mgt_mobile, #mgt_fax").attr("disabled", true);
+        $("#edit_address").show();
+    });
+    
+    $("#mgt_country").change(function(){
+        var selected_country = $(this).val();
+        for(var i = 0; i < country_json.length; i++){
+            if(selected_country === country_json[i].code){
+                var dial_code = country_json[i].dial_code;
+                $("#mgt_preLandLine").val(dial_code);
+            }
+        }
+    });
 });
+
+function init() {
+    //load countries from json.
+    $("#busyDiv").show();
+    var url = site_root + "/Countries.json";
+    $.getJSON(url, function (data) {
+        country_json = data;
+        populateCountryFromJSON(country_json, document.getElementById("mgt_country"));
+    }).done(function () {
+        $("#busyDiv").fadeOut(500);
+    });
+}
 
 $.fn.serializeObject = function () {
     var o = {};
@@ -206,6 +263,16 @@ function populateCountry(data, element) {
         element.options[0] = new Option("Select...", "", false, false);
         for (var i = 0; i < data.length; i++) {
             element.options[i + 1] = new Option(data[i].country_name, data[i].country_iso_code, false, false);
+        }
+    }
+}
+
+function populateCountryFromJSON(data, element) {
+    if (element) {
+        element.options.length = 0;
+        element.options[0] = new Option("Select...", "", false, false);
+        for (var i = 0; i < data.length; i++) {
+            element.options[i + 1] = new Option(data[i].name, data[i].code, false, false);
         }
     }
 }

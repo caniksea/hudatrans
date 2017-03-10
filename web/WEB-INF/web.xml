@@ -65,6 +65,14 @@
         <servlet-name>SendMoney-MGT</servlet-name>
         <jsp-file>/sm-mgt.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Profile Manager</servlet-name>
+        <jsp-file>/profile_mgt.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>Update Basic Details</servlet-name>
+        <jsp-file>/update_basicDetails.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RPServlet</servlet-name>
         <url-pattern>/rps</url-pattern>
@@ -120,6 +128,14 @@
     <servlet-mapping>
         <servlet-name>SendMoney-MGT</servlet-name>
         <url-pattern>/send_penger</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Profile Manager</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Update Basic Details</servlet-name>
+        <url-pattern>/upd-bd</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

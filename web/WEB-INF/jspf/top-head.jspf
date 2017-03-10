@@ -96,16 +96,24 @@
 
         <link href="wp-content/themes/bridge/mta-widget/style2.css" rel="stylesheet" />
         <link href="wp-content/themes/bridge/mta-widget/huda-style.css" rel="stylesheet" />
+        <!-- <msdropdown> -->
+        <link rel="stylesheet" type="text/css" href="wp-content/assets/css/msdropdown/dd.css" />
+        <!-- custom css -->
+        <link href="wp-content/assets/css/aa_style.css" rel="stylesheet" />
 
         <script src="wp-content/themes/bridge/mta-widget/js/velocity.min.js"></script>
         <script src="wp-content/themes/bridge/mta-widget/js/velocity.ui.js"></script>
         <script src="wp-content/themes/bridge/mta-widget/js/widget.js"></script>
-        <!-- <msdropdown> -->
-        <link rel="stylesheet" type="text/css" href="wp-content/assets/css/msdropdown/dd.css" />
-        <link href="wp-content/assets/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="wp-content/assets/css/aa_style.css" rel="stylesheet" />
+        
+        <script src="wp-content/assets/js/jquery.min.js" type="text/javascript"></script>
+        <!-- moment.js -->
+        <script src="wp-content/assets/js/moment.min.js" type="text/javascript"></script>
+        <!-- Bootstrap -->
+        <script src="wp-content/assets/js/bootstrap.min.js" type="text/javascript"></script>
+        <!-- Bootstrap Date time picker -->
+        <script src="wp-content/assets/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
         <!--<script src="wp-content/themes/bridge/mta-widget/js/main.js"></script>-->        
-        <script src="wp-content/assets/js/jquery-1.10.2.js"></script>
+        <!--<script src="wp-content/assets/js/jquery-1.10.2.js"></script>-->
         <!-- <msdropdown> -->
         <script src="wp-content/assets/js/msdropdown/jquery.dd.min.js"></script>
         <!-- togglepassword-->

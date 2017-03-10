@@ -4,6 +4,8 @@
     Author     : caniksea
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.math.BigInteger"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="com.hudatrans.caniksea.model.Beneficiary"%>
@@ -21,10 +23,14 @@
     boolean showSuccess = false, showError = false;
     User user = (User) session.getAttribute("user");
     String customerName = "", customerFirstName = "";
-    String pageTitle = "";
-    int noOfPendingTransaction = 0, noOfTransactions = 0, noOfSuccessfulTxn = 0, noOfFailedTxn = 0;
-    JsonArray pendingT = null, allT = null, beneficiaries = null, successT = null, failedT = null;
+    String pageTitle = "", tnxType = "";
+    int noOfPendingTransaction = 0, noOfTransactions = 0, noOfSuccessfulTxn = 0, noOfFailedTxn = 0, noOfActive = 0;
+    JsonArray pendingT = null, allT = null, beneficiaries = null,
+            successT = null, failedT = null, activeT = null;
     Set<Object> beneficiarySet = new HashSet<>();
+    boolean limit = false, showSearch = false;
+
+    String activeDesc = "Last Ten (10) Transactions";
 
 //    if(currentPage.contains("arbel")) activeStyle = "active";
     if (user != null) {
@@ -92,6 +98,69 @@
         }
         beneficiaries = engine.getJsonArrayFromObjects(beneficiarySet);
 
+        String startDate = request.getParameter("tnx_dateFrom");
+        String endDate = request.getParameter("tnx_dateTo");
+        tnxType = request.getParameter("tnxType");
+        tnxType = tnxType == null ? (String) session.getAttribute("tnx_type") : tnxType;
+
+        if (tnxType == null) {
+            limit = true;
+            activeT = allT;
+            noOfActive = noOfTransactions;
+        } else {
+            limit = false;
+            if (startDate == null || endDate == null) {
+                if (tnxType.equals("a")) {
+                    activeDesc = "All Transactions";
+                    activeT = allT;
+                    noOfActive = noOfTransactions;
+                } else if (tnxType.equals("s")) {
+                    activeDesc = "All Successful Transactions";
+                    activeT = successT;
+                    noOfActive = noOfSuccessfulTxn;
+                } else if (tnxType.equals("f")) {
+                    activeDesc = "All Failed Transactions";
+                    activeT = failedT;
+                    noOfActive = noOfFailedTxn;
+                }
+                showSearch = noOfActive > 1;
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date start = sdf.parse(startDate);
+                Date end = sdf.parse(endDate);
+                limit = false;
+                activeT = new JsonArray();
+                JsonArray tempArray = new JsonArray();
+                String pre = "";
+                if (tnxType.equals("a")) {
+                    tempArray = allT;
+                    pre = "Transaction(s) between  ";
+                } else if (tnxType.equals("s")) {
+                    pre = "Successful Transaction(s) between  ";
+                    tempArray = successT;
+                } else if (tnxType.equals("f")) {
+                    pre = "Failed Transaction(s) between  ";
+                    tempArray = failedT;
+                }
+                for (int i = 0; i < tempArray.size(); i++) {
+                    JsonObject o = (JsonObject) tempArray.get(i);
+                    String dateString = o.get("order_date").getAsString();
+                    Date d = new Date(dateString);
+                    String formattedDate = sdf.format(d);
+                    d = sdf.parse(formattedDate);
+                    if (d.equals(start) || d.equals(end)) {
+                        activeT.add(o);
+                    }
+                    if (d.after(start) && d.before(end)) {
+                        activeT.add(o);
+                    }
+                }
+                activeDesc = pre + startDate + "  and  " + endDate;
+                noOfActive = activeT.size();
+            }
+        }
+        session.removeAttribute("tnx_type");
+
     } else {
         response.sendRedirect("indizea");
     }
@@ -106,31 +175,37 @@
     <section class="content">
         <div class="row" style="margin-bottom:5px;">
             <div class="col-md-4">
-                <div class="sm-st clearfix">
-                    <span class="sm-st-icon st-blue"><i class="fa fa-th-list"></i></span>
-                    <div class="sm-st-info">
-                        <span><%= noOfTransactions%></span>
-                        Total Transactions
+                <a href="route.jsp?tt=a">
+                    <div class="sm-st clearfix">
+                        <span class="sm-st-icon st-blue"><i class="fa fa-th-list"></i></span>
+                        <div class="sm-st-info">
+                            <span><%= noOfTransactions%></span>
+                            Total Transactions
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="sm-st clearfix">
-                    <span class="sm-st-icon st-green"><i class="fa fa-check-square-o"></i></span>
-                    <div class="sm-st-info">
-                        <span><%= noOfSuccessfulTxn%></span>
-                        Successful Transactions
+                <a href="route.jsp?tt=s">
+                    <div class="sm-st clearfix">
+                        <span class="sm-st-icon st-green"><i class="fa fa-check-square-o"></i></span>
+                        <div class="sm-st-info">
+                            <span><%= noOfSuccessfulTxn%></span>
+                            Successful Transactions
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="sm-st clearfix">
-                    <span class="sm-st-icon st-red"><i class="fa fa-stop"></i></span>
-                    <div class="sm-st-info">
-                        <span><%= noOfFailedTxn%></span>
-                        Failed Transactions
+                <a href="route.jsp?tt=f">
+                    <div class="sm-st clearfix">
+                        <span class="sm-st-icon st-red"><i class="fa fa-stop"></i></span>
+                        <div class="sm-st-info">
+                            <span><%= noOfFailedTxn%></span>
+                            Failed Transactions
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
         <!-- Main row -->
@@ -138,119 +213,40 @@
             <div class="col-md-8">
                 <section class="panel">
                     <header class="panel-heading">
-                        Pending Transactions (9)
+                        <%= activeDesc%>
                     </header>
-                    <div class="panel-body table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Transaction Date</th>
-                                    <th>Beneficiary</th>
-                                    <th class="amount-align">Order Amount</th>
-                                    <th class="amount-align">Beneficiary Amount</th>
-                                    <!--<th>Status</th>-->
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <%
-                                    if (noOfPendingTransaction > 0) {
-                                        int upperBound = pendingT.size() > 9 ? 9 : pendingT.size();
-                                        for (int i = 0; i < upperBound; i++) {
-                                            JsonObject o = (JsonObject) pendingT.get(i);
-                                            String currency = o.get("currency").getAsString();
-                                            String benId = o.get("beneficiary_id").getAsString();
-                                            if (currency.equalsIgnoreCase("Naira")) {
-                                                currency = "&#8358;";
-                                            } else if (currency.equalsIgnoreCase("Cedis")) {
-                                                currency = "&#8373;";
-                                            } else if (currency.equalsIgnoreCase("Rand")) {
-                                                currency = "ZAR";
-                                            } else if (currency.equalsIgnoreCase("Pounds")) {
-                                                currency = "&pound;";
-                                            }
-                                            //get beneficiary name
-                                            String name = "";
-                                            if (beneficiaries != null) {
-                                                for (int j = 0; j < beneficiaries.size(); j++) {
-                                                    JsonObject p = (JsonObject) beneficiaries.get(j);
-                                                    double idDbl = p.get("beneficiary_id").getAsDouble();
-                                                    int id = (int) idDbl;
-                                                    String idStr = String.valueOf(id);
-                                                    if (idStr.equals(benId)) {
-                                                        name = p.get("first_name").getAsString() + " " + p.get("last_name").getAsString();
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                %>
-                                <tr>
-                                    <td><%= o.get("order_date").getAsString()%></td>
-                                    <td><%= name%></td>
-                                    <td class="amount-align">&pound; <%= o.get("sending_amount").getAsString()%></td>
-                                    <td class="amount-align"><%= currency%> <%= o.get("receiving_amount").getAsString()%></td>
-                                </tr>
-                                <%
-                                        }
-                                    }
-                                %>
-
-
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
-            <div class="col-lg-4">
-                <section class="panel">
-                    <header class="panel-heading">
-                        Notifications
-                    </header>
-                    <div class="panel-body" id="noti-box">
-                        <% if (!showSuccess && !showError) { %>
-                        <div class="alert alert-info">
-                            <button data-dismiss="alert" class="close close-sm" type="button">
-                                <i class="fa fa-times"></i>
-                            </button>
-                            <strong>All good!</strong> No recent notification.
-                        </div>
-                        <% } else if (showError) { %>
-                        <div class="alert alert-block alert-danger">
-                            <button data-dismiss="alert" class="close close-sm" type="button">
-                                <i class="fa fa-times"></i>
-                            </button>
-                            <strong>Oh snap!</strong> Your last transaction was not successful. <%= errorMessage %>
-                        </div>
-                        <% } else if (showSuccess) { %>
-                        <div class="alert alert-success">
-                            <button data-dismiss="alert" class="close close-sm" type="button">
-                                <i class="fa fa-times"></i>
-                            </button>
-                            <strong>Well done!</strong> Your last transaction was successful.
-                        </div>
-                        <% }%>
-                        <div class="alert alert-warning">
-                            <button data-dismiss="alert" class="close close-sm" type="button">
-                                <i class="fa fa-times"></i>
-                            </button>
-                            <strong>**</strong> You have <%= noOfPendingTransaction%> pending transactions.
+                    <%
+                        if (showSearch) {
+                    %>
+                    <div class="row" style="padding-top: 10px;">
+                        <div class="col-lg-9 col-lg-offset-3">
+                            <form class="form-inline" action="arbel" method="POST">
+                                <input type="hidden" id="tnxType" name="tnxType" value="<%= tnxType%>" />
+                                <div class="form-group">
+                                    <div class='input-group date' id='datetimepicker_from'>
+                                        <input type='text' class="form-control" id="tnx_dateFrom" name="tnx_dateFrom" value="" placeholder="From" required />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class='input-group date' id='datetimepicker_to' style="padding-left: 15px">
+                                        <input type='text' class="form-control" id="tnx_dateTo" name="tnx_dateTo" value="" placeholder="To" required />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success" style="padding-left: 15px">filter</button>
+                            </form>
                         </div>
                     </div>
-                </section>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="panel">
-                    <header class="panel-heading">
-                        Last Five (5) Transactions
-                    </header>
-                    <!-- <div class="box-header"> -->
-                    <!-- <h3 class="box-title">Responsive Hover Table</h3> -->
-
-                    <!-- </div> -->
+                    <%
+                        }
+                    %>
                     <div class="panel-body table-responsive">
+
                         <table class="table table-hover">
                             <tr>
                                 <th>Transaction Date</th>
@@ -260,10 +256,13 @@
                                 <th>Status</th>
                             </tr>
                             <%
-                                if (noOfTransactions > 0) {
-                                    int upperBound = allT.size() > 5 ? 5 : allT.size();
+                                if (noOfActive > 0) {
+                                    int upperBound = activeT.size();
+                                    if (limit) {
+                                        upperBound = activeT.size() > 10 ? 10 : activeT.size();
+                                    }
                                     for (int i = 0; i < upperBound; i++) {
-                                        JsonObject o = (JsonObject) pendingT.get(i);
+                                        JsonObject o = (JsonObject) activeT.get(i);
                                         String benId = o.get("beneficiary_id").getAsString();
                                         String currency = o.get("currency").getAsString();
                                         if (currency.equalsIgnoreCase("Naira")) {
@@ -304,13 +303,129 @@
                                 <td><span class="label <%= statusStyle%>"><%= status%></span></td>
                             </tr>
                             <%
-                                    }
                                 }
+                            } else {
                             %>
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No Record</td>
+                            </tr>
+                            <%}%>
                         </table>
-                    </div><!-- /.box-body -->
-                </div><!-- /.box -->
+
+
+                    </div>
+                </section>
             </div>
+            <div class="col-lg-4">
+                <section class="panel">
+                    <header class="panel-heading">
+                        Notifications
+                    </header>
+                    <div class="panel-body" id="noti-box">
+                        <% if (!showSuccess && !showError) { %>
+                        <div class="alert alert-info">
+                            <button data-dismiss="alert" class="close close-sm" type="button">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <strong>All good!</strong> No recent notification.
+                        </div>
+                        <% } else if (showError) {%>
+                        <div class="alert alert-block alert-danger">
+                            <button data-dismiss="alert" class="close close-sm" type="button">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <strong>Oh snap!</strong> Your last transaction was not successful. <%= errorMessage%>
+                        </div>
+                        <% } else if (showSuccess) { %>
+                        <div class="alert alert-success">
+                            <button data-dismiss="alert" class="close close-sm" type="button">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <strong>Well done!</strong> Your last transaction was successful.
+                        </div>
+                        <% }%>
+                        <div class="alert alert-warning">
+                            <button data-dismiss="alert" class="close close-sm" type="button">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <strong>**</strong> You have <%= noOfPendingTransaction%> pending transactions.
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!--        <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel">
+                            <header class="panel-heading">
+                                Pending Transactions (9)
+                            </header>
+                             <div class="box-header"> 
+                             <h3 class="box-title">Responsive Hover Table</h3> 
+        
+                             </div> 
+                            <div class="panel-body table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Transaction Date</th>
+                                            <th>Beneficiary</th>
+                                            <th class="amount-align">Order Amount</th>
+                                            <th class="amount-align">Beneficiary Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+        
+        <!--%
+//                                    if (noOfPendingTransaction > 0) {
+//                                        int upperBound = pendingT.size() > 9 ? 9 : pendingT.size();
+//                                        for (int i = 0; i < upperBound; i++) {
+//                                            JsonObject o = (JsonObject) pendingT.get(i);
+//                                            String currency = o.get("currency").getAsString();
+//                                            String benId = o.get("beneficiary_id").getAsString();
+//                                            if (currency.equalsIgnoreCase("Naira")) {
+//                                                currency = "&#8358;";
+//                                            } else if (currency.equalsIgnoreCase("Cedis")) {
+//                                                currency = "&#8373;";
+//                                            } else if (currency.equalsIgnoreCase("Rand")) {
+//                                                currency = "ZAR";
+//                                            } else if (currency.equalsIgnoreCase("Pounds")) {
+//                                                currency = "&pound;";
+//                                            }
+//                                            //get beneficiary name
+//                                            String name = "";
+//                                            if (beneficiaries != null) {
+//                                                for (int j = 0; j < beneficiaries.size(); j++) {
+//                                                    JsonObject p = (JsonObject) beneficiaries.get(j);
+//                                                    double idDbl = p.get("beneficiary_id").getAsDouble();
+//                                                    int id = (int) idDbl;
+//                                                    String idStr = String.valueOf(id);
+//                                                    if (idStr.equals(benId)) {
+//                                                        name = p.get("first_name").getAsString() + " " + p.get("last_name").getAsString();
+//                                                        break;
+//                                                    }
+//                                                }
+//                                            }
+        %>
+        <tr>
+            <td><!--%= //o.get("order_date").getAsString()%></td>
+            <td><!--%= //name%></td>
+            <td class="amount-align">&pound; <!--%= //o.get("sending_amount").getAsString()%></td>
+            <td class="amount-align"><!--%= //currency%> <!--%= //o.get("receiving_amount").getAsString()%></td>
+        </tr>
+        <!--%
+//                                        }
+//                                    }
+        %-->
+
+
+        </tbody>
+        </table>
+        </div> <!-- /.box-body -->
+        </div> <!-- /.box  -->
+        </div>
         </div>
         <!-- row end -->
     </section><!-- /.content -->
