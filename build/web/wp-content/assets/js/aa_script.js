@@ -17,9 +17,28 @@ $(function () {
 
     init();
 
-    $("#datetimepicker, #datetimepicker_from, #datetimepicker_to").datetimepicker({
+    $("#datetimepicker").datetimepicker({
         maxDate: new Date(),
         format: 'DD/MM/YYYY'
+    });
+
+    $("#datetimepicker_from").datetimepicker({
+        maxDate: new Date(),
+        format: 'DD/MM/YYYY'
+    });
+
+    $("#datetimepicker_to").datetimepicker({
+        format: 'DD/MM/YYYY',
+        useCurrent: false,
+        maxDate: new Date()
+    });
+    
+    $("#datetimepicker_from").on("dp.change", function(e){
+        $("#datetimepicker_to").data("DateTimePicker").minDate(e.date);
+    });
+    
+    $("#datetimepicker_to").on("dp.change", function(e){
+        $("#datetimepicker_from").data("DateTimePicker").maxDate(e.date);
     });
 
     $("#togglePass").click(function () {
