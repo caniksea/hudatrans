@@ -64,7 +64,7 @@
 
                                 <div class="col-md-6 form-group">
                                     <span class="input-group-addon">POUNDS</span>
-                                    <input type="text" id="sending-amount" name="source_amount" class="form-control" disabled placeholder="Sending Amount">
+                                    <input type="text" id="sending-amount" name="source_amount" class="form-control" disabled placeholder="Sending Amount" required>
                                 </div>
 
                                 <div class="col-md-6 form-group">
